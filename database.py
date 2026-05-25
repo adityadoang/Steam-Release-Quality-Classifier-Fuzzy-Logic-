@@ -1,19 +1,29 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+import sqlite3
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./indie_games.db"
+DATABASE_URL = "./indie_games.db"
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
+def init_db():
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS draft_indie (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT,
+            bug_density REAL,
+            fps REAL,
+            wishlist INTEGER,
+            remaining_budget REAL,
+            score REAL,
+            status TEXT
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
 def get_db():
-    db = SessionLocal()
+    conn = sqlite3.connect(DATABASE_URL, check_same_thread=False)
+    conn.row_factory = sqlite3.Row
     try:
-        yield db
+        yield conn
     finally:
-        db.close()
+        conn.close()

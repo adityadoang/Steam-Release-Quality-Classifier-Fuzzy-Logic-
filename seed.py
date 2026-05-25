@@ -1,9 +1,9 @@
-from database import engine, Base, SessionLocal
-from models import DraftIndie
+import sqlite3
+from database import DATABASE_URL, init_db
 from fuzzy_logic import evaluate_quality
 
 # Create the database tables
-Base.metadata.create_all(bind=engine)
+init_db()
 
 mock_games = [
     {
@@ -44,9 +44,14 @@ mock_games = [
 ]
 
 def seed_db():
-    db = SessionLocal()
+    conn = sqlite3.connect(DATABASE_URL)
+    cursor = conn.cursor()
+    
     # Check if we already have data
-    if db.query(DraftIndie).count() == 0:
+    cursor.execute("SELECT COUNT(*) FROM draft_indie")
+    count = cursor.fetchone()[0]
+    
+    if count == 0:
         for game in mock_games:
             # Evaluate fuzzy quality
             result = evaluate_quality(
@@ -56,21 +61,18 @@ def seed_db():
                 game['remaining_budget']
             )
             
-            db_game = DraftIndie(
-                title=game['title'],
-                bug_density=game['bug_density'],
-                fps=game['fps'],
-                wishlist=game['wishlist'],
-                remaining_budget=game['remaining_budget'],
-                score=result['score'],
-                status=result['status']
+            cursor.execute(
+                """
+                INSERT INTO draft_indie (title, bug_density, fps, wishlist, remaining_budget, score, status)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """,
+                (game['title'], game['bug_density'], game['fps'], game['wishlist'], game['remaining_budget'], result['score'], result['status'])
             )
-            db.add(db_game)
-        db.commit()
+        conn.commit()
         print("Database seeded with mock games.")
     else:
         print("Database already contains data.")
-    db.close()
+    conn.close()
 
 if __name__ == "__main__":
     seed_db()
