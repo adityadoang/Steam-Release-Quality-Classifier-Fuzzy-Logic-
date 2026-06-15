@@ -1,140 +1,292 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Steam Release Quality Classifier</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #121212; color: #e0e0e0; }
-        .card { background-color: #1e1e1e; border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        .card-header { background-color: #2c2c2c; border-bottom: 1px solid #3d3d3d; border-radius: 12px 12px 0 0 !important; font-weight: 600; }
-        .form-control, .form-select { background-color: #2c2c2c; border: 1px solid #444; color: #fff; }
-        .form-control:focus, .form-select:focus { background-color: #333; border-color: #6c757d; box-shadow: none; color: #fff; }
-        .btn-primary { background-color: #0d6efd; border: none; }
-        .btn-primary:hover { background-color: #0b5ed7; }
-        .table { color: #e0e0e0; }
-        .table-dark { background-color: #1e1e1e; }
-        .badge-tunda { background-color: #dc3545; color: white; }
-        .badge-akses { background-color: #ffc107; color: black; }
-        .badge-siap { background-color: #198754; color: white; }
-        th { font-weight: 600; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GameCheck - Steam Theme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-dark: #1b2838;
+  --bg-darker: #171a21;
+  --surface: #202d39;
+  --surface-hover: #2a475e;
+  --border: #2a475e;
+  --text-main: #c7d5e0;
+  --text-light: #ffffff;
+  --text-muted: #8f98a0;
+  --steam-blue: #66c0f4;
+  --steam-green: #a4d007;
+  --steam-green-hover: #8fc100;
+  --font: 'Inter', sans-serif;
+}
+body{background:var(--bg-dark);color:var(--text-main);font-family:var(--font);min-height:100vh;font-size:14px;line-height:1.5}
+
+/* NAVBAR */
+nav{background:var(--bg-darker);padding:20px 40px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
+.nav-logo{font-size:22px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:10px}
+.nav-tagline{font-size:13px;color:var(--text-muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
+
+/* CONTAINER */
+.container{max-width:1100px;margin:30px auto;padding:0 20px;display:grid;grid-template-columns:350px 1fr;gap:30px}
+@media(max-width:850px){.container{grid-template-columns:1fr}}
+
+/* HEADER / HERO */
+.hero{max-width:1100px;margin:40px auto 0;padding:0 20px}
+.hero-title{font-size:28px;font-weight:400;color:var(--text-light);margin-bottom:8px;letter-spacing:-0.5px;text-transform:uppercase}
+.hero-sub{color:var(--steam-blue);font-size:14px}
+
+/* FORM PANEL */
+.panel{background:rgba(0,0,0,0.2);background-image:linear-gradient(to bottom, rgba(32,45,57,1), rgba(32,45,57,0.4));padding:24px;box-shadow:0 4px 8px rgba(0,0,0,0.3);border-radius:3px}
+.panel-title{font-size:16px;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:10px}
+
+.form-group{margin-bottom:20px}
+.form-label{display:block;color:var(--steam-blue);font-size:12px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.form-hint{font-size:12px;color:var(--text-muted);margin-bottom:8px}
+
+.form-input{
+  width:100%;background:rgba(0,0,0,0.4);border:1px solid #000;
+  color:var(--text-light);padding:10px 12px;border-radius:3px;
+  font-family:var(--font);font-size:14px;outline:none;
+  transition:background 0.2s, border 0.2s;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,0.5);
+}
+.form-input:focus{border-color:var(--steam-blue);background:rgba(0,0,0,0.6)}
+
+.btn-submit{
+  background: linear-gradient( to bottom, #799905 5%, #536904 95%);
+  color:#d2efa9;border:none;border-radius:2px;
+  padding:12px 20px;font-size:15px;font-weight:400;text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+  cursor:pointer;width:100%;display:inline-block;text-align:center;
+  transition:all 0.2s;margin-top:10px;text-transform:uppercase;letter-spacing:1px;
+}
+.btn-submit:hover{background: linear-gradient( to bottom, #8ed029 5%, #5a8a1b 95%);color:#fff;}
+
+/* RESULTS PANEL */
+.results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;background:rgba(0,0,0,0.2);padding:12px 16px;border-radius:3px}
+.results-title{font-size:14px;color:var(--text-light);text-transform:uppercase;letter-spacing:1px}
+
+.filter-select{
+  background:rgba(0,0,0,0.4);border:1px solid #000;
+  color:var(--steam-blue);padding:6px 10px;font-size:12px;
+  outline:none;border-radius:2px;cursor:pointer;font-family:var(--font);
+}
+.filter-btn{
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text-main);padding:6px 12px;font-size:12px;
+  cursor:pointer;border-radius:2px;font-family:var(--font);
+}
+.filter-btn:hover{background:var(--surface-hover);color:var(--text-light)}
+
+.game-list{display:flex;flex-direction:column;gap:8px}
+.game-card{
+  background:rgba(0,0,0,0.2);display:flex;align-items:center;
+  padding:14px 16px;border-left:4px solid transparent;
+  transition:background 0.2s;cursor:default;border-radius:3px;
+}
+.game-card:hover{background:var(--surface)}
+.gc-go{border-left-color:var(--steam-green)}
+.gc-soon{border-left-color:#eb9928}
+.gc-wait{border-left-color:#e35b5b}
+
+.gc-info{flex:1}
+.gc-title{font-size:18px;color:var(--text-light);font-weight:400;margin-bottom:6px;letter-spacing:0.5px}
+.gc-meta{font-size:12px;color:var(--text-muted);display:flex;gap:12px;flex-wrap:wrap}
+.gc-meta span{background:rgba(0,0,0,0.3);padding:3px 8px;border-radius:2px;display:flex;align-items:center;border:1px solid rgba(255,255,255,0.05)}
+
+.gc-score-box{text-align:center;width:90px;flex-shrink:0;border-left:1px solid rgba(255,255,255,0.05);margin-left:16px;display:flex;flex-direction:column;justify-content:center}
+.gc-score{font-size:22px;font-weight:400;color:var(--steam-blue);line-height:1}
+.gc-score-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+.gc-verdict-box{width:160px;flex-shrink:0;text-align:right;padding-left:16px;display:flex;justify-content:flex-end;align-items:center}
+.gc-verdict{
+  display:inline-block;padding:6px 12px;font-size:12px;font-weight:500;border-radius:2px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;min-width:130px;
+}
+.v-go{background:rgba(164,208,7,0.1);color:var(--steam-green);border:1px solid rgba(164,208,7,0.2)}
+.v-soon{background:rgba(235,153,40,0.1);color:#eb9928;border:1px solid rgba(235,153,40,0.2)}
+.v-wait{background:rgba(227,91,91,0.1);color:#e35b5b;border:1px solid rgba(227,91,91,0.2)}
+
+.toast{
+  background:#202d39;border:1px solid var(--steam-green);
+  color:var(--text-light);padding:16px 20px;
+  position:fixed;top:20px;right:20px;z-index:100;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.5);border-radius:2px;
+}
+.toast-btn{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:16px}
+
+/* PAGINATION */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.page-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+.page-btn:hover:not(.disabled) {
+  background: var(--surface-hover);
+  color: var(--text-light);
+}
+.page-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.page-info {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+</style>
 </head>
 <body>
-    <div class="container my-5">
-        <h1 class="text-center mb-4 text-light">🎮 Steam Release Quality Classifier</h1>
-        
-        {% if message %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endif %}
 
-        <div class="row g-4">
-            <!-- Left Column: Input Form -->
-            <div class="col-lg-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        Evaluate New Indie Game Draft
-                    </div>
-                    <div class="card-body">
-                        <form action="/api/evaluate" method="POST">
-                            <div class="mb-3">
-                                <label for="title" class="form-label">Game Title</label>
-                                <input type="text" class="form-control" id="title" name="title" required placeholder="e.g. Cyberpunk 2077">
-                            </div>
-                            <div class="mb-3">
-                                <label for="bug_density" class="form-label">Bug Density (Bugs/Hour)</label>
-                                <input type="number" step="0.1" class="form-control" id="bug_density" name="bug_density" required placeholder="0 - 15">
-                                <small class="text-muted">0-2: Sangat Bersih | 3-7: Wajar | >8: Rusak</small>
-                            </div>
-                            <div class="mb-3">
-                                <label for="fps" class="form-label">Optimization (Average FPS)</label>
-                                <input type="number" step="0.1" class="form-control" id="fps" name="fps" required placeholder="0 - 120">
-                                <small class="text-muted">0-25: Patah | 25-50: Stabil | >50: Lancar</small>
-                            </div>
-                            <div class="mb-3">
-                                <label for="wishlist" class="form-label">Wishlist Count</label>
-                                <input type="number" class="form-control" id="wishlist" name="wishlist" required placeholder="0 - 50000+">
-                                <small class="text-muted">0-5k: Sedikit | 5k-20k: Menjanjikan | >20k: Meledak</small>
-                            </div>
-                            <div class="mb-4">
-                                <label for="remaining_budget" class="form-label">Remaining Budget (%)</label>
-                                <input type="number" step="0.1" class="form-control" id="remaining_budget" name="remaining_budget" required placeholder="0 - 100">
-                                <small class="text-muted">0-10%: Kritis | 10-40%: Aman | >40%: Melimpah</small>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100 fw-bold">Compute Fuzzy Logic</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+<nav>
+  <div class="nav-logo">
+    GAMECHECK
+  </div>
+  <div class="nav-tagline">DEVELOPER DASHBOARD</div>
+</nav>
 
-            <!-- Right Column: Results Table -->
-            <div class="col-lg-8">
-                <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Fuzzy Database Records</span>
-                        <form action="/api/query" method="GET" class="d-flex align-items-center" style="max-width: 300px;">
-                            <select class="form-select form-select-sm me-2" name="status">
-                                <option value="">All Statuses</option>
-                                <option value="Tunda/Rombak Total" {% if selected_status == 'Tunda/Rombak Total' %}selected{% endif %}>Tunda/Rombak Total</option>
-                                <option value="Rilis Akses Awal" {% if selected_status == 'Rilis Akses Awal' %}selected{% endif %}>Rilis Akses Awal</option>
-                                <option value="Siap Rilis Penuh" {% if selected_status == 'Siap Rilis Penuh' %}selected{% endif %}>Siap Rilis Penuh</option>
-                            </select>
-                            <button type="submit" class="btn btn-sm btn-outline-light">Filter</button>
-                        </form>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-dark table-hover mb-0 align-middle">
-                                <thead>
-                                    <tr>
-                                        <th class="ps-3">Game Title</th>
-                                        <th>Bugs</th>
-                                        <th>FPS</th>
-                                        <th>Wishlist</th>
-                                        <th>Budget</th>
-                                        <th>Score</th>
-                                        <th>Status Output</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for game in games %}
-                                    <tr>
-                                        <td class="ps-3 fw-bold">{{ game.title }}</td>
-                                        <td>{{ game.bug_density }}</td>
-                                        <td>{{ game.fps }}</td>
-                                        <td>{{ game.wishlist }}</td>
-                                        <td>{{ game.remaining_budget }}%</td>
-                                        <td class="fw-bold">{{ game.score }}</td>
-                                        <td>
-                                            {% if game.status == 'Tunda/Rombak Total' %}
-                                            <span class="badge badge-tunda">Tunda</span>
-                                            {% elif game.status == 'Rilis Akses Awal' %}
-                                            <span class="badge badge-akses">Akses Awal</span>
-                                            {% else %}
-                                            <span class="badge badge-siap">Siap Rilis</span>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% else %}
-                                    <tr>
-                                        <td colspan="7" class="text-center text-muted py-4">No records found in database. Try seeding the DB.</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+{% if message %}
+<div class="toast" id="toast">
+  <span style="color:var(--steam-green)">✓</span>
+  {{ message }}
+  <button class="toast-btn" onclick="document.getElementById('toast').remove()">&#10005;</button>
+</div>
+{% endif %}
+
+<div class="hero">
+  <h1 class="hero-title">Evaluasi Kualitas Rilis</h1>
+  <div class="hero-sub">Masukkan metrik game kamu untuk menilai kesiapan rilis.</div>
+</div>
+
+<div class="container">
+  
+  <!-- FORM -->
+  <div class="panel">
+    <div class="panel-title">Submit Build Baru</div>
+    <form action="/api/evaluate" method="POST" onsubmit="this.querySelector('button[type=submit]').disabled=true; this.querySelector('button[type=submit]').innerText='Memproses...';">
+      <div class="form-group">
+        <label class="form-label">Judul Game</label>
+        <input class="form-input" type="text" name="title" required placeholder="Cth: Half-Life 3">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Kepadatan Bug / Jam</label>
+        <div class="form-hint">Rata-rata bug mengganggu saat dimainkan per jam.</div>
+        <input class="form-input" type="number" step="0.1" name="bug_density" required placeholder="Cth: 2.5">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Rata-rata FPS</label>
+        <div class="form-hint">Frame rate selama gameplay normal.</div>
+        <input class="form-input" type="number" step="0.1" name="fps" required placeholder="Cth: 60">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Jumlah Wishlist</label>
+        <div class="form-hint">Total wishlist saat ini di halaman toko.</div>
+        <input class="form-input" type="number" name="wishlist" required placeholder="Cth: 15000">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Sisa Anggaran (%)</label>
+        <div class="form-hint">Persentase budget yang masih tersisa.</div>
+        <input class="form-input" type="number" step="0.1" name="remaining_budget" required placeholder="Cth: 35">
+      </div>
+
+      <button type="submit" class="btn-submit">Evaluasi Kesiapan</button>
+    </form>
+  </div>
+
+  <!-- RESULTS -->
+  <div>
+    <div class="results-header">
+      <div class="results-title">Riwayat Evaluasi ({{ total_items }} game)</div>
+      <form action="/api/query" method="GET" style="display:flex;gap:8px">
+        <select class="filter-select" name="status">
+          <option value="">Semua Status</option>
+          <option value="Tunda/Rombak Total" {% if selected_status=='Tunda/Rombak Total' %}selected{% endif %}>Perlu Dipoles</option>
+          <option value="Rilis Akses Awal"   {% if selected_status=='Rilis Akses Awal'   %}selected{% endif %}>Early Access</option>
+          <option value="Siap Rilis Penuh"   {% if selected_status=='Siap Rilis Penuh'   %}selected{% endif %}>Siap Rilis</option>
+        </select>
+        <button type="submit" class="filter-btn">Saring</button>
+      </form>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="game-list">
+      {% for game in games %}
+        {% set v_class = 'gc-go' %}
+        {% set v_pill = 'v-go' %}
+        {% if game.status == 'Tunda/Rombak Total' %}
+          {% set v_class = 'gc-wait' %}
+          {% set v_pill = 'v-wait' %}
+        {% elif game.status == 'Rilis Akses Awal' %}
+          {% set v_class = 'gc-soon' %}
+          {% set v_pill = 'v-soon' %}
+        {% endif %}
+
+        <div class="game-card {{ v_class }}">
+          <div class="gc-info">
+            <div class="gc-title">{{ game.title }}</div>
+            <div class="gc-meta">
+              <span>Bug Dens: {{ game.bug_density }}</span>
+              <span>FPS: {{ game.fps }}</span>
+              <span>Wishlist: {{ game.wishlist }}</span>
+              <span>Budget: {{ game.remaining_budget }}%</span>
+            </div>
+          </div>
+          
+          <div class="gc-score-box">
+            <div class="gc-score">{{ "%.1f"|format(game.score) }}</div>
+            <div class="gc-score-label">Skor</div>
+          </div>
+
+          <div class="gc-verdict-box">
+            <div class="gc-verdict {{ v_pill }}">
+              {{ game.status }}
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div style="padding:40px;text-align:center;background:rgba(0,0,0,0.2);color:var(--text-muted);font-size:14px;border-radius:3px">
+          Belum ada game yang dievaluasi. Submit build baru untuk melihat hasil.
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if total_pages > 1 %}
+    <div class="pagination">
+      {% set base_url = '/api/query?status=' ~ (selected_status | default('')) | urlencode ~ '&page=' %}
+      
+      {% if current_page > 1 %}
+        <a href="{{ base_url }}{{ current_page - 1 }}" class="page-btn">Sebelumnya</a>
+      {% else %}
+        <span class="page-btn disabled">Sebelumnya</span>
+      {% endif %}
+      
+      <span class="page-info">Halaman {{ current_page }} dari {{ total_pages }}</span>
+      
+      {% if current_page < total_pages %}
+        <a href="{{ base_url }}{{ current_page + 1 }}" class="page-btn">Selanjutnya</a>
+      {% else %}
+        <span class="page-btn disabled">Selanjutnya</span>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+</div>
 </body>
 </html>
