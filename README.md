@@ -9,7 +9,7 @@ Aplikasi ini menggunakan **Mamdani Fuzzy Inference System** untuk mengevaluasi p
 ## 🛠️ Teknologi yang Digunakan
 - **Backend:** Python dengan Framework **FastAPI**
 - **Fuzzy Logic Engine:** `scikit-fuzzy`
-- **Database:** SQLite dengan ORM **SQLAlchemy**
+- **Database:** SQLite (Raw SQL)
 - **Frontend:** HTML, CSS, dan **Bootstrap 5** (Jinja2 Templates)
 
 ---
@@ -79,10 +79,9 @@ Buka browser (Chrome, Firefox, Edge) dan kunjungi alamat berikut:
 📦 projek
  ┣ 📂 templates           # Direktori berisi file HTML (UI Frontend)
  ┃ ┗ 📜 index.html        # Halaman dashboard utama
- ┣ 📜 database.py         # Konfigurasi koneksi database SQLite (SQLAlchemy)
+ ┣ 📜 database.py         # Konfigurasi koneksi database SQLite
  ┣ 📜 fuzzy_logic.py      # Implementasi Mamdani Fuzzy Rules & Fallback
  ┣ 📜 main.py             # File utama FastAPI (Routing, API, & Controller)
- ┣ 📜 models.py           # Skema tabel database (DraftIndie)
  ┣ 📜 requirements.txt    # Daftar library Python yang dibutuhkan
  ┣ 📜 seed.py             # Script untuk mengisi mock data ke dalam database
  ┗ 📜 .gitignore          # File pengecualian git
