@@ -6,148 +6,8 @@
 <title>GameCheck - Steam Theme</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg-dark: #1b2838;
-  --bg-darker: #171a21;
-  --surface: #202d39;
-  --surface-hover: #2a475e;
-  --border: #2a475e;
-  --text-main: #c7d5e0;
-  --text-light: #ffffff;
-  --text-muted: #8f98a0;
-  --steam-blue: #66c0f4;
-  --steam-green: #a4d007;
-  --steam-green-hover: #8fc100;
-  --font: 'Inter', sans-serif;
-}
-body{background:var(--bg-dark);color:var(--text-main);font-family:var(--font);min-height:100vh;font-size:14px;line-height:1.5}
-
-/* NAVBAR */
-nav{background:var(--bg-darker);padding:20px 40px;display:flex;align-items:center;gap:16px;box-shadow:0 2px 4px rgba(0,0,0,0.2)}
-.nav-logo{font-size:22px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:10px}
-.nav-tagline{font-size:13px;color:var(--text-muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
-
-/* CONTAINER */
-.container{max-width:1100px;margin:30px auto;padding:0 20px;display:grid;grid-template-columns:350px 1fr;gap:30px}
-@media(max-width:850px){.container{grid-template-columns:1fr}}
-
-/* HEADER / HERO */
-.hero{max-width:1100px;margin:40px auto 0;padding:0 20px}
-.hero-title{font-size:28px;font-weight:400;color:var(--text-light);margin-bottom:8px;letter-spacing:-0.5px;text-transform:uppercase}
-.hero-sub{color:var(--steam-blue);font-size:14px}
-
-/* FORM PANEL */
-.panel{background:rgba(0,0,0,0.2);background-image:linear-gradient(to bottom, rgba(32,45,57,1), rgba(32,45,57,0.4));padding:24px;box-shadow:0 4px 8px rgba(0,0,0,0.3);border-radius:3px}
-.panel-title{font-size:16px;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:10px}
-
-.form-group{margin-bottom:20px}
-.form-label{display:block;color:var(--steam-blue);font-size:12px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
-.form-hint{font-size:12px;color:var(--text-muted);margin-bottom:8px}
-
-.form-input{
-  width:100%;background:rgba(0,0,0,0.4);border:1px solid #000;
-  color:var(--text-light);padding:10px 12px;border-radius:3px;
-  font-family:var(--font);font-size:14px;outline:none;
-  transition:background 0.2s, border 0.2s;
-  box-shadow:inset 0 1px 3px rgba(0,0,0,0.5);
-}
-.form-input:focus{border-color:var(--steam-blue);background:rgba(0,0,0,0.6)}
-
-.btn-submit{
-  background: linear-gradient( to bottom, #799905 5%, #536904 95%);
-  color:#d2efa9;border:none;border-radius:2px;
-  padding:12px 20px;font-size:15px;font-weight:400;text-shadow: 1px 1px 0px rgba(0,0,0,0.3);
-  cursor:pointer;width:100%;display:inline-block;text-align:center;
-  transition:all 0.2s;margin-top:10px;text-transform:uppercase;letter-spacing:1px;
-}
-.btn-submit:hover{background: linear-gradient( to bottom, #8ed029 5%, #5a8a1b 95%);color:#fff;}
-
-/* RESULTS PANEL */
-.results-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;background:rgba(0,0,0,0.2);padding:12px 16px;border-radius:3px}
-.results-title{font-size:14px;color:var(--text-light);text-transform:uppercase;letter-spacing:1px}
-
-.filter-select{
-  background:rgba(0,0,0,0.4);border:1px solid #000;
-  color:var(--steam-blue);padding:6px 10px;font-size:12px;
-  outline:none;border-radius:2px;cursor:pointer;font-family:var(--font);
-}
-.filter-btn{
-  background:var(--surface);border:1px solid var(--border);
-  color:var(--text-main);padding:6px 12px;font-size:12px;
-  cursor:pointer;border-radius:2px;font-family:var(--font);
-}
-.filter-btn:hover{background:var(--surface-hover);color:var(--text-light)}
-
-.game-list{display:flex;flex-direction:column;gap:8px}
-.game-card{
-  background:rgba(0,0,0,0.2);display:flex;align-items:center;
-  padding:14px 16px;border-left:4px solid transparent;
-  transition:background 0.2s;cursor:default;border-radius:3px;
-}
-.game-card:hover{background:var(--surface)}
-.gc-go{border-left-color:var(--steam-green)}
-.gc-soon{border-left-color:#eb9928}
-.gc-wait{border-left-color:#e35b5b}
-
-.gc-info{flex:1}
-.gc-title{font-size:18px;color:var(--text-light);font-weight:400;margin-bottom:6px;letter-spacing:0.5px}
-.gc-meta{font-size:12px;color:var(--text-muted);display:flex;gap:12px;flex-wrap:wrap}
-.gc-meta span{background:rgba(0,0,0,0.3);padding:3px 8px;border-radius:2px;display:flex;align-items:center;border:1px solid rgba(255,255,255,0.05)}
-
-.gc-score-box{text-align:center;width:90px;flex-shrink:0;border-left:1px solid rgba(255,255,255,0.05);margin-left:16px;display:flex;flex-direction:column;justify-content:center}
-.gc-score{font-size:22px;font-weight:400;color:var(--steam-blue);line-height:1}
-.gc-score-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
-
-.gc-verdict-box{width:160px;flex-shrink:0;text-align:right;padding-left:16px;display:flex;justify-content:flex-end;align-items:center}
-.gc-verdict{
-  display:inline-block;padding:6px 12px;font-size:12px;font-weight:500;border-radius:2px;text-transform:uppercase;letter-spacing:0.5px;text-align:center;min-width:130px;
-}
-.v-go{background:rgba(164,208,7,0.1);color:var(--steam-green);border:1px solid rgba(164,208,7,0.2)}
-.v-soon{background:rgba(235,153,40,0.1);color:#eb9928;border:1px solid rgba(235,153,40,0.2)}
-.v-wait{background:rgba(227,91,91,0.1);color:#e35b5b;border:1px solid rgba(227,91,91,0.2)}
-
-.toast{
-  background:#202d39;border:1px solid var(--steam-green);
-  color:var(--text-light);padding:16px 20px;
-  position:fixed;top:20px;right:20px;z-index:100;
-  display:flex;align-items:center;gap:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.5);border-radius:2px;
-}
-.toast-btn{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:16px}
-
-/* PAGINATION */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
-}
-.page-btn {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text-main);
-  padding: 6px 12px;
-  border-radius: 2px;
-  text-decoration: none;
-  font-size: 13px;
-  transition: all 0.2s;
-}
-.page-btn:hover:not(.disabled) {
-  background: var(--surface-hover);
-  color: var(--text-light);
-}
-.page-btn.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.page-info {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
@@ -212,17 +72,117 @@ nav{background:var(--bg-darker);padding:20px 40px;display:flex;align-items:cente
 
   <!-- RESULTS -->
   <div>
-    <div class="results-header">
+    <div class="query-tabs">
+      <button class="query-tab" id="tab-standard" onclick="showTab('standard')">Kueri Standar</button>
+      <button class="query-tab" id="tab-fuzzy" onclick="showTab('fuzzy')">Pencarian Fuzzy (Model Tahani)</button>
+      <button class="query-tab" id="tab-charts" onclick="showTab('charts')">Kurva Himpunan Fuzzy</button>
+    </div>
+
+    <!-- STANDARD FILTER FORM -->
+    <div id="form-standard" class="results-header" style="margin-bottom: 16px;">
       <div class="results-title">Riwayat Evaluasi ({{ total_items }} game)</div>
       <form action="/api/query" method="GET" style="display:flex;gap:8px">
+        <input type="hidden" name="query_type" value="standard">
         <select class="filter-select" name="status">
           <option value="">Semua Status</option>
-          <option value="Tunda/Rombak Total" {% if selected_status=='Tunda/Rombak Total' %}selected{% endif %}>Perlu Dipoles</option>
+          <option value="Tunda/Rombak Total" {% if selected_status=='Tunda/Rombak Total' %}selected{% endif %}>Perlu Dipoles (Tunda)</option>
           <option value="Rilis Akses Awal"   {% if selected_status=='Rilis Akses Awal'   %}selected{% endif %}>Early Access</option>
-          <option value="Siap Rilis Penuh"   {% if selected_status=='Siap Rilis Penuh'   %}selected{% endif %}>Siap Rilis</option>
+          <option value="Siap Rilis Penuh"   {% if selected_status=='Siap Rilis Penuh'   %}selected{% endif %}>Siap Rilis Penuh</option>
         </select>
         <button type="submit" class="filter-btn">Saring</button>
       </form>
+    </div>
+
+    <!-- FUZZY FILTER FORM -->
+    <div id="form-fuzzy" style="display: none; margin-bottom: 16px;">
+      <form action="/api/query" method="GET" class="panel" style="background: rgba(0,0,0,0.25); border: 1px solid var(--border); padding: 16px; border-radius: 3px; display: flex; flex-direction: column; gap: 12px;">
+        <input type="hidden" name="query_type" value="fuzzy">
+        <div class="results-title" style="margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px;">Fuzzy Query Builder (Model Tahani)</div>
+        
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+          <div>
+            <label class="form-label" style="font-size: 11px;">Kepadatan Bug</label>
+            <select class="filter-select" name="bug_density_fuzzy" style="width: 100%; height: 35px; font-size: 13px;">
+              <option value="">Semua (Any)</option>
+              <option value="sangat_bersih" {% if bug_density_fuzzy == 'sangat_bersih' %}selected{% endif %}>Sangat Bersih (&mu;_sangat_bersih)</option>
+              <option value="wajar" {% if bug_density_fuzzy == 'wajar' %}selected{% endif %}>Wajar (&mu;_wajar)</option>
+              <option value="rusak" {% if bug_density_fuzzy == 'rusak' %}selected{% endif %}>Rusak (&mu;_rusak)</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="form-label" style="font-size: 11px;">FPS / Optimasi</label>
+            <select class="filter-select" name="fps_fuzzy" style="width: 100%; height: 35px; font-size: 13px;">
+              <option value="">Semua (Any)</option>
+              <option value="patah_patah" {% if fps_fuzzy == 'patah_patah' %}selected{% endif %}>Patah-patah (&mu;_patah_patah)</option>
+              <option value="stabil" {% if fps_fuzzy == 'stabil' %}selected{% endif %}>Stabil (&mu;_stabil)</option>
+              <option value="lancar" {% if fps_fuzzy == 'lancar' %}selected{% endif %}>Lancar (&mu;_lancar)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label" style="font-size: 11px;">Jumlah Wishlist</label>
+            <select class="filter-select" name="wishlist_fuzzy" style="width: 100%; height: 35px; font-size: 13px;">
+              <option value="">Semua (Any)</option>
+              <option value="sedikit" {% if wishlist_fuzzy == 'sedikit' %}selected{% endif %}>Sedikit (&mu;_sedikit)</option>
+              <option value="menjanjikan" {% if wishlist_fuzzy == 'menjanjikan' %}selected{% endif %}>Menjanjikan (&mu;_menjanjikan)</option>
+              <option value="meledak" {% if wishlist_fuzzy == 'meledak' %}selected{% endif %}>Meledak (&mu;_meledak)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label" style="font-size: 11px;">Sisa Anggaran</label>
+            <select class="filter-select" name="budget_fuzzy" style="width: 100%; height: 35px; font-size: 13px;">
+              <option value="">Semua (Any)</option>
+              <option value="kritis" {% if budget_fuzzy == 'kritis' %}selected{% endif %}>Kritis (&mu;_kritis)</option>
+              <option value="aman" {% if budget_fuzzy == 'aman' %}selected{% endif %}>Aman (&mu;_aman)</option>
+              <option value="melimpah" {% if budget_fuzzy == 'melimpah' %}selected{% endif %}>Melimpah (&mu;_melimpah)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 6px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="form-label" style="margin-bottom: 0;">Relasi Logic:</span>
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer; color: var(--text-main);">
+              <input type="radio" name="operator" value="AND" {% if operator == 'AND' or not operator %}checked{% endif %}> AND (Min)
+            </label>
+            <label style="display: flex; align-items: center; gap: 4px; font-size: 13px; cursor: pointer; color: var(--text-main);">
+              <input type="radio" name="operator" value="OR" {% if operator == 'OR' %}checked{% endif %}> OR (Max)
+            </label>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
+            <span class="form-label" style="margin-bottom: 0;">Alpha Cut (&alpha;):</span>
+            <input type="range" name="alpha_cut" min="0" max="1" step="0.1" value="{{ alpha_cut | default(0.0) }}" oninput="this.nextElementSibling.innerText = this.value" style="width: 80px; accent-color: var(--steam-blue); cursor: pointer;">
+            <span style="font-family: monospace; font-size: 13px; color: var(--steam-blue); min-width: 24px;">{{ alpha_cut | default(0.0) }}</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;">
+          <a href="/" class="filter-btn" style="text-decoration: none; text-align: center; line-height: 20px;">Reset Filter</a>
+          <button type="submit" class="filter-btn" style="background: var(--steam-green-hover); color: white; border: none; padding: 6px 16px; border-radius: 2px;">Cari Fuzzy</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- CHARTS TAB -->
+    <div id="content-charts" class="panel" style="display: none; background: rgba(0,0,0,0.25); border: 1px solid var(--border); padding: 20px; margin-bottom: 16px;">
+      <div class="results-title" style="margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px;">Visualisasi Kurva Keanggotaan Fuzzy</div>
+      
+      <!-- Mini Tabs -->
+      <div style="display: flex; gap: 4px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin;">
+        <button type="button" class="filter-btn active-chart-tab" id="btn-chart-bug" onclick="switchChart('bug')">Bug</button>
+        <button type="button" class="filter-btn" id="btn-chart-fps" onclick="switchChart('fps')">FPS</button>
+        <button type="button" class="filter-btn" id="btn-chart-wish" onclick="switchChart('wish')">Wishlist</button>
+        <button type="button" class="filter-btn" id="btn-chart-budget" onclick="switchChart('budget')">Budget</button>
+        <button type="button" class="filter-btn" id="btn-chart-quality" onclick="switchChart('quality')">Output</button>
+      </div>
+      
+      <!-- Canvas Wrapper -->
+      <div style="position: relative; background: rgba(0,0,0,0.4); padding: 16px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.05); min-height: 350px; display: flex; align-items: center; justify-content: center;">
+        <canvas id="fuzzyChart"></canvas>
+      </div>
     </div>
 
     <div class="game-list">
@@ -237,38 +197,87 @@ nav{background:var(--bg-darker);padding:20px 40px;display:flex;align-items:cente
           {% set v_pill = 'v-soon' %}
         {% endif %}
 
-        <div class="game-card {{ v_class }}">
-          <div class="gc-info">
-            <div class="gc-title">{{ game.title }}</div>
-            <div class="gc-meta">
-              <span>Bug Dens: {{ game.bug_density }}</span>
-              <span>FPS: {{ game.fps }}</span>
-              <span>Wishlist: {{ game.wishlist }}</span>
-              <span>Budget: {{ game.remaining_budget }}%</span>
+        <div class="game-card {{ v_class }}" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+            <div class="gc-info">
+              <div class="gc-title" style="margin-bottom: 2px;">{{ game.title }}</div>
+              <div class="gc-meta">
+                <span>Bug Dens: {{ game.bug_density }}</span>
+                <span>FPS: {{ game.fps }}</span>
+                <span>Wishlist: {{ game.wishlist }}</span>
+                <span>Budget: {{ game.remaining_budget }}%</span>
+              </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 12px; flex-shrink: 0;">
+              {% if game.match_degree is defined %}
+                <div class="gc-score-box" style="margin-left: 0; padding-left: 0; border-left: none; width: 85px;">
+                  <div class="gc-score" style="color: var(--steam-blue); font-weight: 600;">{{ "%.2f"|format(game.match_degree) }}</div>
+                  <div class="gc-score-label" style="color: var(--steam-blue);">Match (&mu;)</div>
+                </div>
+              {% endif %}
+
+              <div class="gc-score-box" style="margin-left: 0; width: 55px; border-left: 1px solid rgba(255,255,255,0.05); padding-left: 10px;">
+                <div class="gc-score">{{ "%.1f"|format(game.score) }}</div>
+                <div class="gc-score-label">Skor</div>
+              </div>
+
+              <div class="gc-verdict-box" style="width: auto; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.05);">
+                <div class="gc-verdict {{ v_pill }}" style="min-width: 125px; font-size: 11px;">
+                  {{ game.status }}
+                </div>
+              </div>
             </div>
           </div>
-          
-          <div class="gc-score-box">
-            <div class="gc-score">{{ "%.1f"|format(game.score) }}</div>
-            <div class="gc-score-label">Skor</div>
-          </div>
 
-          <div class="gc-verdict-box">
-            <div class="gc-verdict {{ v_pill }}">
-              {{ game.status }}
+          <!-- Fuzzy Membership Values (Linguistik) -->
+          <div style="display: flex; flex-direction: column; gap: 4px; background: rgba(0,0,0,0.15); padding: 8px; border-radius: 2px; border: 1px dashed rgba(255,255,255,0.03); font-size: 11px; color: var(--text-muted);">
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
+              <span>&mu;_Bug: 
+                <span class="fuzzy-badge" style="color: var(--steam-blue);">Bersih: {{ "%.2f"|format(game.mu_bug_sangat_bersih) }}</span>
+                <span class="fuzzy-badge" style="color: #eb9928;">Wajar: {{ "%.2f"|format(game.mu_bug_wajar) }}</span>
+                <span class="fuzzy-badge" style="color: #e35b5b;">Rusak: {{ "%.2f"|format(game.mu_bug_rusak) }}</span>
+              </span>
+              <span>&mu;_FPS: 
+                <span class="fuzzy-badge" style="color: #e35b5b;">Patah: {{ "%.2f"|format(game.mu_fps_patah_patah) }}</span>
+                <span class="fuzzy-badge" style="color: #eb9928;">Stabil: {{ "%.2f"|format(game.mu_fps_stabil) }}</span>
+                <span class="fuzzy-badge" style="color: var(--steam-blue);">Lancar: {{ "%.2f"|format(game.mu_fps_lancar) }}</span>
+              </span>
+            </div>
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 4px;">
+              <span>&mu;_Wishlist: 
+                <span class="fuzzy-badge" style="color: #e35b5b;">Sedikit: {{ "%.2f"|format(game.mu_wishlist_sedikit) }}</span>
+                <span class="fuzzy-badge" style="color: #eb9928;">Menjanjikan: {{ "%.2f"|format(game.mu_wishlist_menjanjikan) }}</span>
+                <span class="fuzzy-badge" style="color: var(--steam-blue);">Meledak: {{ "%.2f"|format(game.mu_wishlist_meledak) }}</span>
+              </span>
+              <span>&mu;_Budget: 
+                <span class="fuzzy-badge" style="color: #e35b5b;">Kritis: {{ "%.2f"|format(game.mu_budget_kritis) }}</span>
+                <span class="fuzzy-badge" style="color: #eb9928;">Aman: {{ "%.2f"|format(game.mu_budget_aman) }}</span>
+                <span class="fuzzy-badge" style="color: var(--steam-blue);">Melimpah: {{ "%.2f"|format(game.mu_budget_melimpah) }}</span>
+              </span>
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.03); padding-top: 4px; display: flex; align-items: center; gap: 4px;">
+              <span>&mu;_Output:</span>
+              <span class="fuzzy-badge" style="color: #e35b5b;">Tunda: {{ "%.2f"|format(game.mu_quality_tunda) }}</span>
+              <span class="fuzzy-badge" style="color: #eb9928;">Akses Awal: {{ "%.2f"|format(game.mu_quality_akses_awal) }}</span>
+              <span class="fuzzy-badge" style="color: var(--steam-green);">Siap Rilis: {{ "%.2f"|format(game.mu_quality_siap_rilis) }}</span>
             </div>
           </div>
         </div>
       {% else %}
         <div style="padding:40px;text-align:center;background:rgba(0,0,0,0.2);color:var(--text-muted);font-size:14px;border-radius:3px">
-          Belum ada game yang dievaluasi. Submit build baru untuk melihat hasil.
+          Tidak ada data game yang memenuhi kriteria.
         </div>
       {% endfor %}
     </div>
 
     {% if total_pages > 1 %}
     <div class="pagination">
-      {% set base_url = '/api/query?status=' ~ (selected_status | default('')) | urlencode ~ '&page=' %}
+      {% if query_type == 'fuzzy' %}
+        {% set base_url = '/api/query?query_type=fuzzy&bug_density_fuzzy=' ~ (bug_density_fuzzy|default('')) ~ '&fps_fuzzy=' ~ (fps_fuzzy|default('')) ~ '&wishlist_fuzzy=' ~ (wishlist_fuzzy|default('')) ~ '&budget_fuzzy=' ~ (budget_fuzzy|default('')) ~ '&operator=' ~ (operator|default('AND')) ~ '&alpha_cut=' ~ (alpha_cut|default(0.0)) ~ '&page=' %}
+      {% else %}
+        {% set base_url = '/api/query?query_type=standard&status=' ~ (selected_status | default('')) | urlencode ~ '&page=' %}
+      {% endif %}
       
       {% if current_page > 1 %}
         <a href="{{ base_url }}{{ current_page - 1 }}" class="page-btn">Sebelumnya</a>
@@ -288,5 +297,17 @@ nav{background:var(--bg-darker);padding:20px 40px;display:flex;align-items:cente
   </div>
 
 </div>
+
+<script src="/static/script.js" defer></script>
+<script>
+// Set initial tab state based on server-side query_type variable
+document.addEventListener("DOMContentLoaded", function() {
+  {% if query_type == 'fuzzy' %}
+    showTab('fuzzy');
+  {% else %}
+    showTab('standard');
+  {% endif %}
+});
+</script>
 </body>
 </html>

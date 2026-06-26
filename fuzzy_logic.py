@@ -36,55 +36,96 @@ release_quality['tunda'] = fuzz.trapmf(release_quality.universe, [0, 0, 35, 45])
 release_quality['akses_awal'] = fuzz.trapmf(release_quality.universe, [35, 50, 65, 80])
 release_quality['siap_rilis'] = fuzz.trapmf(release_quality.universe, [70, 85, 100, 100])
 
-# 3. Rules
-# Extremely bad conditions -> Tunda
-rule1 = ctrl.Rule(bug_density['rusak'] | fps['patah_patah'] | budget['kritis'], release_quality['tunda'])
+# 3. Rules (Mamdani Murni Komprehensif)
+2
+# -- Pengaruh Bug Density --
+rule_bug_1 = ctrl.Rule(bug_density['rusak'], release_quality['tunda'])
+rule_bug_2 = ctrl.Rule(bug_density['wajar'], release_quality['akses_awal'])
+rule_bug_3 = ctrl.Rule(bug_density['sangat_bersih'], release_quality['siap_rilis'])
 
-# Excellent conditions -> Siap Rilis
-rule2 = ctrl.Rule(bug_density['sangat_bersih'] & fps['lancar'] & wishlist['meledak'] & (budget['aman'] | budget['melimpah']), release_quality['siap_rilis'])
+# -- Pengaruh FPS --
+rule_fps_1 = ctrl.Rule(fps['patah_patah'], release_quality['tunda'])
+rule_fps_2 = ctrl.Rule(fps['stabil'], release_quality['akses_awal'])
+rule_fps_3 = ctrl.Rule(fps['lancar'], release_quality['siap_rilis'])
 
-# Good conditions but with minor issues -> Akses Awal
-rule3 = ctrl.Rule(bug_density['wajar'] & fps['stabil'] & (wishlist['menjanjikan'] | wishlist['meledak']), release_quality['akses_awal'])
-rule4 = ctrl.Rule(bug_density['sangat_bersih'] & fps['lancar'] & wishlist['menjanjikan'], release_quality['akses_awal'])
+# -- Pengaruh Wishlist --
+rule_wish_1 = ctrl.Rule(wishlist['sedikit'], release_quality['tunda'])
+rule_wish_2 = ctrl.Rule(wishlist['menjanjikan'], release_quality['akses_awal'])
+rule_wish_3 = ctrl.Rule(wishlist['meledak'], release_quality['siap_rilis'])
 
-# High potential but high bugs -> Akses Awal or Tunda (depending on budget)
-rule5 = ctrl.Rule(bug_density['rusak'] & wishlist['meledak'] & budget['melimpah'], release_quality['akses_awal'])
-
-# Mediocre games -> Tunda if wishlist is bad
-rule6 = ctrl.Rule(bug_density['wajar'] & fps['stabil'] & wishlist['sedikit'], release_quality['tunda'])
-
-# Missing combinations that fallback
-rule7 = ctrl.Rule(bug_density['sangat_bersih'] & fps['stabil'] & wishlist['sedikit'] & budget['aman'], release_quality['akses_awal'])
-rule8 = ctrl.Rule(bug_density['wajar'] & fps['lancar'] & budget['melimpah'], release_quality['akses_awal'])
-rule9 = ctrl.Rule(wishlist['sedikit'] & budget['aman'], release_quality['tunda'])
+# -- Pengaruh Budget --
+rule_budg_1 = ctrl.Rule(budget['kritis'], release_quality['tunda'])
+rule_budg_2 = ctrl.Rule(budget['aman'], release_quality['akses_awal'])
+rule_budg_3 = ctrl.Rule(budget['melimpah'], release_quality['siap_rilis'])
 
 # 4. Control System
-quality_ctrl = ctrl.ControlSystem([rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8, rule9])
+quality_ctrl = ctrl.ControlSystem([
+    rule_bug_1, rule_bug_2, rule_bug_3,
+    rule_fps_1, rule_fps_2, rule_fps_3,
+    rule_wish_1, rule_wish_2, rule_wish_3,
+    rule_budg_1, rule_budg_2, rule_budg_3
+])
 quality_sim = ctrl.ControlSystemSimulation(quality_ctrl)
+
+def get_membership_degrees(bugs: float, frames: float, wishes: int, budg: float, score: float = None) -> dict:
+    """
+    Calculates membership degrees (mu) for all variables.
+    """
+    mu_bug_sangat_bersih = float(fuzz.interp_membership(bug_density.universe, bug_density['sangat_bersih'].mf, bugs))
+    mu_bug_wajar = float(fuzz.interp_membership(bug_density.universe, bug_density['wajar'].mf, bugs))
+    mu_bug_rusak = float(fuzz.interp_membership(bug_density.universe, bug_density['rusak'].mf, bugs))
+
+    mu_fps_patah_patah = float(fuzz.interp_membership(fps.universe, fps['patah_patah'].mf, frames))
+    mu_fps_stabil = float(fuzz.interp_membership(fps.universe, fps['stabil'].mf, frames))
+    mu_fps_lancar = float(fuzz.interp_membership(fps.universe, fps['lancar'].mf, frames))
+
+    mu_wishlist_sedikit = float(fuzz.interp_membership(wishlist.universe, wishlist['sedikit'].mf, wishes))
+    mu_wishlist_menjanjikan = float(fuzz.interp_membership(wishlist.universe, wishlist['menjanjikan'].mf, wishes))
+    mu_wishlist_meledak = float(fuzz.interp_membership(wishlist.universe, wishlist['meledak'].mf, wishes))
+
+    mu_budget_kritis = float(fuzz.interp_membership(budget.universe, budget['kritis'].mf, budg))
+    mu_budget_aman = float(fuzz.interp_membership(budget.universe, budget['aman'].mf, budg))
+    mu_budget_melimpah = float(fuzz.interp_membership(budget.universe, budget['melimpah'].mf, budg))
+
+    if score is not None:
+        mu_quality_tunda = float(fuzz.interp_membership(release_quality.universe, release_quality['tunda'].mf, score))
+        mu_quality_akses_awal = float(fuzz.interp_membership(release_quality.universe, release_quality['akses_awal'].mf, score))
+        mu_quality_siap_rilis = float(fuzz.interp_membership(release_quality.universe, release_quality['siap_rilis'].mf, score))
+    else:
+        mu_quality_tunda = 0.0
+        mu_quality_akses_awal = 0.0
+        mu_quality_siap_rilis = 0.0
+
+    return {
+        "mu_bug_sangat_bersih": round(mu_bug_sangat_bersih, 4),
+        "mu_bug_wajar": round(mu_bug_wajar, 4),
+        "mu_bug_rusak": round(mu_bug_rusak, 4),
+        "mu_fps_patah_patah": round(mu_fps_patah_patah, 4),
+        "mu_fps_stabil": round(mu_fps_stabil, 4),
+        "mu_fps_lancar": round(mu_fps_lancar, 4),
+        "mu_wishlist_sedikit": round(mu_wishlist_sedikit, 4),
+        "mu_wishlist_menjanjikan": round(mu_wishlist_menjanjikan, 4),
+        "mu_wishlist_meledak": round(mu_wishlist_meledak, 4),
+        "mu_budget_kritis": round(mu_budget_kritis, 4),
+        "mu_budget_aman": round(mu_budget_aman, 4),
+        "mu_budget_melimpah": round(mu_budget_melimpah, 4),
+        "mu_quality_tunda": round(mu_quality_tunda, 4),
+        "mu_quality_akses_awal": round(mu_quality_akses_awal, 4),
+        "mu_quality_siap_rilis": round(mu_quality_siap_rilis, 4)
+    }
 
 def evaluate_quality(bugs: float, frames: float, wishes: int, budg: float) -> dict:
     """
-    Evaluates the release quality using the Mamdani fuzzy logic engine.
+    Evaluates the release quality using the pure Mamdani fuzzy logic engine.
     """
     quality_sim.input['bug_density'] = bugs
     quality_sim.input['fps'] = frames
     quality_sim.input['wishlist'] = wishes
     quality_sim.input['budget'] = budg
     
-    try:
-        quality_sim.compute()
-        score = quality_sim.output['release_quality']
-    except KeyError:
-        # Fallback when the input combination does not trigger any rules
-        # Calculate a rough estimation based on the inputs
-        # Bugs: 0 (good) -> 15 (bad). FPS: 120 (good) -> 0 (bad)
-        # Wishlist: 50000 (good) -> 0. Budget: 100 (good) -> 0
-        norm_bug = max(0, 100 - (bugs / 15 * 100))
-        norm_fps = min(100, (frames / 60 * 100))
-        norm_wish = min(100, (wishes / 20000 * 100))
-        norm_budg = budg
-        
-        score = (norm_bug * 0.3) + (norm_fps * 0.3) + (norm_wish * 0.2) + (norm_budg * 0.2)
+    # 100% Mamdani Murni, tidak perlu diakali menggunakan blok try-except
+    quality_sim.compute()
+    score = quality_sim.output['release_quality']
     
     if score <= 40:
         status = "Tunda/Rombak Total"
@@ -93,7 +134,9 @@ def evaluate_quality(bugs: float, frames: float, wishes: int, budg: float) -> di
     else:
         status = "Siap Rilis Penuh"
         
+    memberships = get_membership_degrees(bugs, frames, wishes, budg, score)
     return {
         "score": round(score, 2),
-        "status": status
+        "status": status,
+        "memberships": memberships
     }

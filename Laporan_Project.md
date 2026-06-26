@@ -14,15 +14,20 @@ Sebuah aplikasi web berbasis **Fuzzy Database System** yang dirancang untuk memp
 ---
 
 **3. Database yang Dipakai:**
-**SQLite** (Diimplementasikan menggunakan library bawaan Python `sqlite3` dan file database lokal `indie_games.db`).
+**SQLite** (Diimplementasikan menggunakan library bawaan Python `sqlite3` dan file database lokal `indie_games.db`). Database ini dirancang sebagai **Fuzzy Relational Database** (Model Tahani/Umano) yang secara fisik menyimpan nilai derajat keanggotaan ($\mu$) untuk masing-masing atribut linguistik di dalam kolom tabel, yaitu:
+* `mu_bug_sangat_bersih`, `mu_bug_wajar`, `mu_bug_rusak` (derajat keanggotaan Kepadatan Bug)
+* `mu_fps_patah_patah`, `mu_fps_stabil`, `mu_fps_lancar` (derajat keanggotaan Kualitas FPS)
+* `mu_wishlist_sedikit`, `mu_wishlist_menjanjikan`, `mu_wishlist_meledak` (derajat keanggotaan Jumlah Wishlist)
+* `mu_budget_kritis`, `mu_budget_aman`, `mu_budget_melimpah` (derajat keanggotaan Sisa Anggaran)
+* `mu_quality_tunda`, `mu_quality_akses_awal`, `mu_quality_siap_rilis` (derajat keanggotaan Status Hasil Evaluasi)
 
 ---
 
 **4. Query Database (Minimal 5) dan Masing-masing Peruntukannya:**
 
-Berikut adalah 5 query SQL utama yang digunakan di dalam aplikasi (pada `database.py`, `main.py`, dan `seed.py`):
+Berikut adalah 5 query/operasi database utama yang digunakan di dalam aplikasi (pada `database.py`, `main.py`, dan `seed.py`):
 
-**Query 1: Pembuatan Tabel (DDL)**
+**Query 1: Pembuatan Tabel dengan Kolom Derajat Keanggotaan Fuzzy (DDL)**
 ```sql
 CREATE TABLE IF NOT EXISTS draft_indie (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,35 +37,63 @@ CREATE TABLE IF NOT EXISTS draft_indie (
     wishlist INTEGER,
     remaining_budget REAL,
     score REAL,
-    status TEXT
+    status TEXT,
+    -- Kolom Fuzzy Membership Degrees (μ)
+    mu_bug_sangat_bersih REAL,
+    mu_bug_wajar REAL,
+    mu_bug_rusak REAL,
+    mu_fps_patah_patah REAL,
+    mu_fps_stabil REAL,
+    mu_fps_lancar REAL,
+    mu_wishlist_sedikit REAL,
+    mu_wishlist_menjanjikan REAL,
+    mu_wishlist_meledak REAL,
+    mu_budget_kritis REAL,
+    mu_budget_aman REAL,
+    mu_budget_melimpah REAL,
+    mu_quality_tunda REAL,
+    mu_quality_akses_awal REAL,
+    mu_quality_siap_rilis REAL
 )
 ```
-* **Peruntukan:** Digunakan saat inisialisasi awal sistem (`database.py`) untuk membuat skema tabel `draft_indie` jika tabel tersebut belum ada di database. Tabel ini berfungsi untuk menyimpan seluruh data input game beserta hasil perhitungan fuzzzynya.
+* **Peruntukan:** Dijalankan saat inisialisasi awal sistem (`database.py`) untuk membuat tabel `draft_indie` dengan skema fuzzy lengkap jika tabel belum ada.
 
-**Query 2: Menampilkan Seluruh Data (DML - Select)**
+**Query 2: Memasukkan Data Evaluasi Baru beserta Derajat Keanggotaannya (DML - Insert)**
 ```sql
-SELECT * FROM draft_indie
+INSERT INTO draft_indie (
+    title, bug_density, fps, wishlist, remaining_budget, score, status,
+    mu_bug_sangat_bersih, mu_bug_wajar, mu_bug_rusak,
+    mu_fps_patah_patah, mu_fps_stabil, mu_fps_lancar,
+    mu_wishlist_sedikit, mu_wishlist_menjanjikan, mu_wishlist_meledak,
+    mu_budget_kritis, mu_budget_aman, mu_budget_melimpah,
+    mu_quality_tunda, mu_quality_akses_awal, mu_quality_siap_rilis
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ```
-* **Peruntukan:** Digunakan pada route halaman utama (`/` di `main.py`) untuk mengambil keseluruhan data game yang telah tersimpan di dalam database, untuk kemudian ditampilkan ke dalam bentuk tabel di halaman web pengguna (dashboard).
+* **Peruntukan:** Digunakan pada endpoint `/api/evaluate` dan script `seed.py` untuk menyimpan data game baru beserta hasil evaluasi skor, status, dan 15 nilai derajat keanggotaan fuzzy ($\mu$) yang dihitung secara dinamis.
 
-**Query 3: Memasukkan Data Evaluasi Baru (DML - Insert)**
+**Query 3: Penghitungan Jumlah Baris yang Memenuhi Kriteria Fuzzy (DML - Select Count)**
 ```sql
-INSERT INTO draft_indie (title, bug_density, fps, wishlist, remaining_budget, score, status)
-VALUES (?, ?, ?, ?, ?, ?, ?)
+-- Contoh kueri dinamis untuk operator AND (MIN)
+SELECT COUNT(*) FROM draft_indie WHERE mu_bug_sangat_bersih >= ? AND mu_fps_lancar >= ?
 ```
-* **Peruntukan:** Digunakan pada endpoint `/api/evaluate` (`main.py`) untuk menyimpan data game baru yang diinputkan pengguna melalui form (beserta hasil skor dan status perhitungan fuzzy logic) ke dalam database.
+* **Peruntukan:** Digunakan di fungsi `get_fuzzy_games` (`main.py`) untuk menghitung total data game yang memenuhi kriteria fuzzy query dengan batas minimal alpha-cut tertentu, guna kebutuhan pagination secara dinamis langsung dari database.
 
-**Query 4: Filter Data Berdasarkan Status (DML - Select with Where)**
+**Query 4: Kueri Fuzzy Model Tahani (DML - Evaluasi Kondisi, Kalkulasi Derajat Kecocokan & Filter)**
 ```sql
-SELECT * FROM draft_indie WHERE status = ?
+-- Contoh kueri dinamis untuk operator AND (MIN)
+SELECT *, MIN(mu_bug_sangat_bersih, mu_fps_lancar) AS match_degree
+FROM draft_indie
+WHERE mu_bug_sangat_bersih >= ? AND mu_fps_lancar >= ?
+ORDER BY match_degree DESC, id DESC
+LIMIT ? OFFSET ?
 ```
-* **Peruntukan:** Digunakan pada endpoint `/api/query` (`main.py`) untuk fitur filter pencarian. Query ini mengambil daftar game secara spesifik berdasarkan hasil status kelayakannya (misal: hanya menampilkan game yang berstatus "Siap Rilis Penuh").
+* **Peruntukan:** Merealisasikan kueri pencarian fuzzy Model Tahani langsung di level database SQLite. Pengguna dapat mencari game dengan kriteria fuzzy (misal: `Bug Bersih AND FPS Lancar`) dengan batas minimal tingkat kecocokan (Alpha-Cut) tertentu. Fungsi `MIN` (untuk `AND`) atau `MAX` (untuk `OR`) menghitung `match_degree` ($\mu$), menyaring baris berdasarkan alpha-cut di level database, mengurutkannya dari yang paling cocok, dan membatasi jumlah data per halaman.
 
-**Query 5: Mengecek Jumlah Data (DML - Aggregate)**
+**Query 5: Filter Kueri Standar Berdasarkan Status Kelayakan Tegas (DML - Select with Where)**
 ```sql
-SELECT COUNT(*) FROM draft_indie
+SELECT * FROM draft_indie WHERE status = ? ORDER BY id DESC LIMIT ? OFFSET ?
 ```
-* **Peruntukan:** Digunakan di dalam fungsi seeding (`seed.py`) untuk menghitung total baris/record yang ada di tabel. Tujuannya adalah untuk memastikan agar mock data/data awal tidak dimasukkan dua kali (data hanya di-insert jika tabel masih kosong/jumlahnya 0).
+* **Peruntukan:** Digunakan pada pencarian kueri standar untuk menyaring riwayat game berdasarkan status kelayakan tegas (*crisp*) pilihan user secara cepat menggunakan index.
 
 ---
 
